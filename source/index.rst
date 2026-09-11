@@ -1,67 +1,62 @@
-CubeBraid SDK Documentation
-===========================
+CubeBraid 装卸柜机器人技术文档
+==============================
+
+CubeBraid SDK 面向集装箱装卸柜机器人系统，提供 AGV、工业相机、机器人、PLC、倾角仪、运动学、参数管理和日志等基础能力。本网站采用 ROS 2 Documentation 使用的 Sphinx + Read the Docs 模板，内容以 CubeBraid SDK 的公开头文件、示例程序和脚本为准。
 
 .. toctree::
    :titlesonly:
-   :maxdepth: 1
+   :maxdepth: 2
    :hidden:
 
    About-CubeBraid
    Get-Started
-   Releases
    SDK-Architecture
    Submodules
-   Developer-Tools
    API-Reference
-   Migration-and-Upgrades
-   The-CubeBraid-Project
+   Guides/Container-Workflow
+   Guides/Configuration
+   Guides/Safety
+   Guides/Deployment
+   Developer-Tools
+   Releases
    Contact
-   Contributing
 
-**CubeBraid SDK 是专为工业自动化与机器人协同开发打造的高性能综合软件开发包。**
-
-从底层的机械臂控制、PLC 通信、工业相机图像采集，到传感器数据处理与通用日志/配置管理，CubeBraid SDK 为您的自动化与机器人应用提供了完整的模块化解决方案。
-
-:ref:`了解更多关于 CubeBraid SDK <AboutCubeBraid>`
-
-本文档适用于 **CubeBraid SDK v1.0 及以上版本**。如果您正在寻找特定子模块（如 `KawasakiSDK`、`CameraSDK` 或 `PLC_SDK`）的详细接口说明，请参阅 :doc:`API-Reference` 或查阅各子模块专项指南。
-
-快速入门
+快速开始
 --------
 
-* :doc:`安装指南 <Get-Started/Installation>`
-  - 环境依赖配置与 CubeBraid SDK 的安装/集成说明
-* :doc:`快速上手 <Get-Started/Quickstart>`
-  - 新手必看！通过简单的示例项目快速掌握 SDK 的基础调用流程
-* :doc:`子模块指南 <Submodules>`
-  - 详细了解 AGV、Camera、Json、Kawasaki、Logger、PLC、Robot 和 Sensor 8 大核心模块的使用方法
-* :doc:`开发者工具 <Developer-Tools>`
-  - 提供调试工具、日志分析器与常用配置模板的快速使用说明
-* :doc:`API 参考手册 <API-Reference>`
-  - 完整的 C++ 与 Python API 接口声明与参数手册
+如果您第一次使用 CubeBraid SDK，建议按以下顺序阅读：
 
-CubeBraid SDK 核心子模块
--------------------------
+* :doc:`产品与能力 <About-CubeBraid>`：了解 SDK 在装卸柜机器人中的职责边界。
+* :doc:`安装与构建 <Get-Started/Installation>`：从 GitHub 获取 SDK，并使用 CMake 生成 demo。
+* :doc:`第一个程序 <Get-Started/Quickstart>`：先从不连接硬件的参数读取和算法调用开始。
+* :doc:`装卸柜业务流程 <Guides/Container-Workflow>`：了解视觉、AGV、机器人和 PLC 如何协同。
+* :doc:`模块总览 <Submodules>`：根据设备或功能进入对应的 API 参考。
 
-* **AGV_SDK**：移动机器人（AMR/AGV）导航、运动控制与状态监听
-* **CameraSDK**：工业相机（梅卡曼德、海康、大华、Basler 等）图像采集与图像流管理
-* **JsonSDK**：系统配置文件解析与数据序列化工具
-* **KawasakiSDK**：川崎（Kawasaki）机械臂专用底层通信与 AS 指令控制
-* **LoggerSDK**：全 SDK 统一的高性能日志记录与格式化输出
-* **PLC_SDK**：工业 PLC（西门子 S7、欧姆龙 FINS、Modbus）寄存器读写通信
-* **RobotSDK**：通用机械臂运动学与位姿控制抽象层
-* **SensorSDK**：激光雷达、超声波及力控传感器数据采集与预处理
+核心模块
+--------
 
-社区与开发者资源
-----------------
+* **AGV_SDK**：AGV 网络连接、登录、自动/手动运动和位姿读取。
+* **CameraSDK**：集装箱基准点、最后一面侧吸基准点和航向角偏差计算。
+* **RobotSDK**：机械臂连接、笛卡尔/关节运动和顶吸、侧吸目标位姿补偿。
+* **PLC_SDK**：PLC DB 块读写、吸盘/底托信号、装柜状态和取料参数同步。
+* **SensorSDK**：DXL360 倾角仪串口采集、自动重连和角度归零。
+* **JsonSDK**：读取手眼标定、SKU、机器人位姿、垛型及续码配置。
+* **KawasakiSDK**：川崎 RS080N 运动学正解、逆解和奇异点规避。
+* **LoggerSDK**：线程安全日志、格式化输出和紧急停止记录。
 
-如果您在开发过程中遇到问题，或希望参与 CubeBraid SDK 的建设：
+接口形态
+--------
 
-* :doc:`贡献指南 <Contributing>`
-  - 代码提交规范、文档编写标准以及 Pull Request 流程
-* :doc:`版本发布日志 <Releases>`
-  - 查看 SDK 的历史更新日志、最新特性与 Roadmap
-* :doc:`联系与支持 <Contact>`
-  - 提交 Bug 反馈、功能需求建议或获取技术支持响应
+SDK 同时提供原生 C++ 接口和部分 C ABI 接口。C ABI 适合 Python ``ctypes``、C# 或其他 FFI 封装；使用时必须保证调用方的结构体布局、参数类型、单位和 DLL 位数与头文件一致。
 
-更多信息请访问 `CubeBraid 官方网站 <https://www.cubebraid.com/>`__。
+.. important::
+
+   任何会调用 ``connect``、``control``、``goForward``、``goBack`` 或 PLC 输出信号的示例，都可能驱动真实设备。首次运行前请阅读 :doc:`安全须知 <Guides/Safety>`，并在断开执行机构或仿真环境中完成验证。
+
+版本说明
+--------
+
+当前页面对应 CubeBraid SDK 仓库中的接口快照。若头文件、动态库和本文档版本不一致，请优先以随 SDK 发布的 ``include`` 目录头文件为准，并记录 SDK commit 或发布版本。
+
+* `CubeBraid 官方网站 <https://www.cubebraid.com/>`__
+* `CubeBraid SDK GitHub 仓库 <https://github.com/GJXS1980/cubebraid_sdk>`__

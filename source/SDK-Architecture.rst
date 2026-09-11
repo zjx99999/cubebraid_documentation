@@ -1,15 +1,58 @@
+SDK 架构
+========
 
+CubeBraid SDK 按设备连接、任务数据、算法计算和业务握手拆分模块。每个模块都拥有独立头文件和库文件，应用可以只链接需要的部分。
 
-Framework
-=========
+分层模型
+--------
 
-Coming Soon
+.. list-table::
+   :header-rows: 1
+   :widths: 20 35 45
 
-.. toctree::
-   :maxdepth: 3
+   * - 层级
+     - 模块
+     - 责任
+   * - 设备连接层
+     - AGV / Camera / Robot / PLC / Sensor
+     - 建立网络或串口连接，发送控制指令，读取设备状态。
+   * - 数据与配置层
+     - JsonSDK
+     - 读取标定、SKU、机器人状态、垛型和续码配置，并提供字段更新接口。
+   * - 运动与视觉算法层
+     - RobotSDK / CameraSDK / KawasakiSDK
+     - 计算基准点、抓取目标、姿态变换、正逆运动学和奇异点规避。
+   * - 可观测性层
+     - LoggerSDK
+     - 统一日志实例、格式化日志和紧急停止原因记录。
 
-   ROS-Framework/How-ROS-Works
-   ROS-Framework/About-Nodes
-   ROS-Framework/Interfaces-Topics-Services-Actions
-   ROS-Framework/About-Parameters
-   ROS-Framework/About-Client-Libraries
+一次装卸柜任务
+--------------
+
+下面是根据现有 demo 和公开接口整理的典型顺序。实际设备的握手顺序应以现场 PLC 程序、机器人程序和安全规范为准：
+
+#. 通过 JsonSDK 读取手眼标定、SKU、机器人位姿、垛型和续码参数。
+#. 启动倾角仪，获取当前 X/Y 角度；必要时把角度同步到 PLC。
+#. 连接 AGV、相机、机器人和 PLC，并检查每个模块的状态。
+#. 使用 CameraSDK 计算集装箱基准点或航向角偏差。
+#. 使用 RobotSDK 将视觉基准点、SKU 尺寸、抓取模式和倾角转换为目标位姿。
+#. 通过 PLC_SDK 发送取料参数、摆台角度、箱数状态和吸盘/底托信号。
+#. 通过 RobotSDK 发送经过安全检查的运动指令，并持续读取实际位姿和关节状态。
+#. 每个动作完成后更新 JSON/PLC 状态，记录日志，并在异常时进入安全停止流程。
+
+线程与资源
+----------
+
+多个硬件模块内部使用后台线程：
+
+* AGVController 内部包含接收线程和心跳线程；
+* PLCController 内部包含读、写和监控线程；
+* Inclinometer 内部管理串口采集和自动重连；
+* 设备类在析构或显式断开时应停止后台工作并释放连接。
+
+应用退出时应显式执行 ``stop``/``disconnect``/``Destroy`` 等清理步骤，不要依赖进程强制结束来回收设备资源。
+
+接口与二进制
+------------
+
+头文件使用平台相关的导出宏。C++ 应用需要匹配 C++14、编译器 ABI、x64 位数和库配置；Python 等 FFI 调用则需要严格映射 ``ctypes`` 类型及结构体对齐。PLC 的 ``PLCStatus`` 和 ``PickUpData`` 使用 ``#pragma pack(push, 1)``，Python 映射时也必须设置 ``_pack_ = 1``。

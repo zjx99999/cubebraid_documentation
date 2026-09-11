@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# CubeBraid SDK documentation build configuration file.
-# Based on Sphinx documentation configuration.
+# CubeBraid 装卸柜机器人技术文档构建配置。
+# 页面采用 ROS 2 Documentation 使用的 Sphinx + Read the Docs 模板，
+# 内容仅面向 CubeBraid SDK，不再构建原始 ROS 2 内容。
 #
 # This file is executed with the current directory set to its
 # containing directory.
@@ -13,22 +14,8 @@
 # serve to show the default.
 
 
-import os
 import sys
 import time
-
-
-# ============================================================================
-# Path configuration
-# ============================================================================
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here.
-#
-# If the directory is relative to the documentation root, use
-# os.path.abspath() to make it absolute.
-
-sys.path.append(os.path.abspath('./plugins'))
 
 
 # ============================================================================
@@ -54,12 +41,15 @@ default_role = 'any'
 # 文档界面语言
 language = 'zh_CN'
 
+# Use Sphinx's Chinese tokenizer so Chinese words in page content are indexed.
+html_search_language = 'zh'
+
 
 # The name of the project.
-project = 'CubeBraid SDK Documentation'
+project = 'CubeBraid 装卸柜机器人技术文档'
 
 # The author of the project.
-author = 'GrantLi'
+author = 'CubeBraid'
 
 # Copyright information.
 copyright = '{}, {}'.format(time.strftime('%Y'), author)
@@ -94,12 +84,8 @@ suppress_warnings = [
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 #
-# source/_internal holds reusable snippets that are pulled into pages
-# with the ".. include::" directive; they are never rendered as standalone pages.
-
 exclude_patterns = [
     '**/_*.rst',
-    '_internal/**',
 ]
 
 
@@ -118,9 +104,7 @@ pygments_style = 'sphinx'
 
 extensions = [
     # Sphinx official extensions
-    # 'sphinx.ext.graphviz',
     'sphinx.ext.ifconfig',
-    'sphinx.ext.intersphinx',
 
     # Code copy button
     'sphinx_copybutton',
@@ -134,24 +118,7 @@ extensions = [
     # Mermaid diagram support
     'sphinxcontrib.mermaid',
 
-    # Open Graph metadata
-    'sphinxext.opengraph',
 ]
-
-
-# ============================================================================
-# Intersphinx configuration
-# ============================================================================
-
-# Intersphinx allows the SDK documentation to reference
-# external Python documentation.
-
-intersphinx_mapping = {
-    'python': (
-        'https://docs.python.org/3',
-        None,
-    ),
-}
 
 
 # ============================================================================
@@ -195,7 +162,7 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     'collapse_navigation': False,
     'sticky_navigation': True,
-    'navigation_depth': -1,
+    'navigation_depth': 4,
 }
 
 
@@ -207,18 +174,18 @@ html_theme_options = {
 
 # html_context = {
 #     'display_github': True,
-#     'github_user': 'GJXS1980',
+#     'github_user': 'zjx99999',
 #     'github_repo': 'cubebraid_documentation',
-#     'github_version': 'main',
+#     'github_version': 'main/',
 # }
 
 html_context = {
     # GitHub 仓库信息
     'display_github': True,
-    'github_user': 'GJXS1980',
+    'github_user': 'zjx99999',
     'github_repo': 'cubebraid_documentation',
-    'github_version': 'main',
-    'github_url': 'https://github.com/GJXS1980/cubebraid_documentation/',
+    # The RTD theme concatenates this value directly with the source path.
+    'github_version': 'main/',
 }
 
 
@@ -293,42 +260,7 @@ htmlhelp_basename = 'cubebraid_sdk_documentation'
 #
 # For local builds, this value does not affect the local HTTP server.
 
-html_baseurl = 'https://docs.cubebraid.com'
-
-
-# ============================================================================
-# Open Graph configuration
-# ============================================================================
-
-# Open Graph metadata is used when documentation pages
-# are shared on websites and social media.
-
-ogp_site_url = 'https://docs.cubebraid.com/'
-ogp_site_name = 'CubeBraid SDK Documentation'
-
-
-# Open Graph image.
-#
-# Put the image under:
-#
-# source/_static/logo.png
-#
-# If the image does not exist yet, this configuration can be removed
-# temporarily.
-
-ogp_image = '_static/logo.png'
-
-
-# ============================================================================
-# Sitemap configuration
-# ============================================================================
-
-# URL scheme used by the sitemap generator.
-#
-# Since CubeBraid SDK Documentation does not use ROS 2 multiversion
-# documentation, the URL structure is kept simple.
-
-sitemap_url_scheme = '{link}'
+html_baseurl = 'https://zjx99999.github.io/cubebraid_documentation/'
 
 
 # ============================================================================

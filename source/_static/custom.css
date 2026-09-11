@@ -1,3 +1,24 @@
 .wy-nav-content {
     max-width: 64rem;
 }
+
+.pageheader {
+    background: #f4f7fb;
+    border-bottom: 1px solid #d8e0ea;
+    color: #334155;
+    font-size: 0.9rem;
+    padding: 0.25rem 0 0.45rem;
+}
+
+#topnav-table {
+    border: 0;
+    margin: 0 auto;
+}
+
+#topnav-table a {
+    color: #1565c0;
+}
+
+.admonition.important {
+    border-left-color: #1565c0;
+}

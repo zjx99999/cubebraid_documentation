@@ -1,248 +1,28 @@
+版本与变更
+==========
 
+当前文档对应 `cubebraid_sdk GitHub 仓库 <https://github.com/GJXS1980/cubebraid_sdk>`__ 的公开接口快照。SDK 目录包含 ``include``、``lib``、``bin``、``src``、``scripts`` 和 ``doc``，但当前快照没有统一的版本清单或变更日志文件。
 
-.. _Releases:
+兼容性记录
+----------
 
-Distributions
-=============
+发布 SDK 时建议同时记录以下信息：
 
-What is a Distribution?
------------------------
+* Git commit 或发布 tag；
+* C++ 标准、编译器和目标架构；
+* ``include`` 头文件版本；
+* ``.lib``、``.dll`` 及第三方依赖版本；
+* 设备固件、PLC 程序和机器人程序版本；
+* 参数文件格式及字段变更。
 
-A ROS distribution is a versioned set of ROS packages.
-These are akin to Linux distributions (e.g. Ubuntu).
-The purpose of the ROS distributions is to let developers work against a relatively stable codebase until they are ready to roll everything forward.
-Therefore once a distribution is released, we try to limit changes to bug fixes and non-breaking improvements for the core packages (every thing under ros-desktop-full).
-That generally applies to the whole community, but for "higher" level packages, the rules are less strict, and so it falls to the maintainers of a given package to avoid breaking changes.
+升级原则
+--------
 
-.. _list_of_distributions:
+#. 先在离线环境验证 JsonSDK、RobotSDK 和 KawasakiSDK 的纯数据/算法调用。
+#. 在断开执行机构或仿真环境中验证设备连接、状态读取和异常路径。
+#. 对 PLC 信号、AGV 位移和机器人运动进行小范围、低风险联调。
+#. 升级前备份参数文件和现场 DLL；升级后检查单位、结构体布局和默认端口。
 
-List of Distributions
----------------------
+.. note::
 
-Below is a list of current and historic ROS 2 distributions.
-Rows in the table marked in blue are the currently supported distributions.
-
-.. toctree::
-   :hidden:
-
-   Releases/Release-Process
-   Releases/Release-Lyrical-Luth
-   Releases/Release-Kilted-Kaiju
-   Releases/Release-Jazzy-Jalisco
-   Releases/Release-Humble-Hawksbill
-   Releases/Release-Rolling-Ridley
-   Releases/Development
-   Releases/End-of-Life
-
-.. raw:: html
-
-   <!--
-     This CSS overrides the styles of certain rows to mark them blue, indicating they are supported releases.
-     For the odd number rows, a line like the following must be used:
-
-       .rst-content table.distros:not(.field-list) tr:nth-child(1) td {...}
-
-     For the even number rows, a line like the following must be used:
-
-       .rst-content tr:nth-child(2) {...}
-
-     No other combination I've found has worked.  Yes, this is extremely fragile.  No, I don't understand
-     why it is like this.
-   -->
-   <style>
-     /* Targeting the cells and rows for the background and plain text */
-    .rst-content table.distros:not(.field-list) tr:nth-child(1) td,
-    .rst-content table.distros tr:nth-child(2),
-    .rst-content table.distros:not(.field-list) tr:nth-child(3) td,
-    .rst-content table.distros:not(.field-list) tr:nth-child(5) td {
-      background-color: #22314E;
-      color: white;
-    }
-
-    /* Targeting the links inside those specific rows to force them to be not-blue */
-    .rst-content table.distros:not(.field-list) tr:nth-child(1) td a,
-    .rst-content table.distros tr:nth-child(2) a,
-    .rst-content table.distros:not(.field-list) tr:nth-child(3) td a,
-    .rst-content table.distros:not(.field-list) tr:nth-child(3) td a {
-      color: #B0B0B0 !important;
-    }
-   </style>
-
-.. |rolling| image:: Releases/rolling-small.png
-   :alt: Rolling logo
-
-.. |lyrical| image:: Releases/lyrical-small.png
-   :alt: Lyrical logo
-
-.. |kilted| image:: Releases/kilted-small.png
-   :alt: Kilted logo
-
-.. |jazzy| image:: Releases/jazzy-small.png
-   :alt: Jazzy logo
-
-.. |iron| image:: Releases/iron-small.png
-   :alt: Iron logo
-
-.. |humble| image:: Releases/humble-small.png
-   :alt: Humble logo
-
-.. |galactic| image:: Releases/galactic-small.png
-   :alt: Galactic logo
-
-.. |foxy| image:: Releases/foxy-small.png
-   :alt: Foxy logo
-
-.. |eloquent| image:: Releases/eloquent-small.png
-   :alt: Eloquent logo
-
-.. |dashing| image:: Releases/dashing-small.png
-   :alt: Dashing logo
-
-.. |crystal| image:: Releases/crystal-small.png
-   :alt: Crystal logo
-
-.. |bouncy| image:: Releases/bouncy-small.png
-   :alt: Bouncy logo
-
-.. |ardent| image:: Releases/ardent-small.png
-   :alt: Ardent logo
-
-.. list-table::
-   :class: distros
-   :header-rows: 1
-   :widths: 35 25 30 20 10
-
-   * - Distro
-     - Release date
-     - Logo
-     - EOL date
-     - ROS Boss
-   * - :doc:`Lyrical Luth <Releases/Release-Lyrical-Luth>`
-     - May 22, 2026
-     - |lyrical|
-     - May 2031
-     - `Shane Loretz <https://github.com/sloretz>`_
-   * - :doc:`Kilted Kaiju <Releases/Release-Kilted-Kaiju>`
-     - May 23, 2025
-     - |kilted|
-     - December 2026
-     - `Scott K Logan <https://github.com/cottsay>`_
-   * - :doc:`Jazzy Jalisco <Releases/Release-Jazzy-Jalisco>`
-     - May 23, 2024
-     - |jazzy|
-     - May 2029
-     - `Marco A. Gutiérrez <https://github.com/marcoag>`_
-   * - :doc:`Iron Irwini <Releases/Release-Iron-Irwini>`
-     - May 23, 2023
-     - |iron|
-     - December 4, 2024
-     - `Yadunund Vijay <https://github.com/Yadunund>`_
-   * - :doc:`Humble Hawksbill <Releases/Release-Humble-Hawksbill>`
-     - May 23, 2022
-     - |humble|
-     - May 2027
-     - `Christophe Bédard <https://github.com/christophebedard>`_ / `Audrow Nash <https://github.com/audrow>`_
-   * - :doc:`Galactic Geochelone <Releases/Release-Galactic-Geochelone>`
-     - May 23, 2021
-     - |galactic|
-     - December 9, 2022
-     - `Scott Logan <https://github.com/cottsay/>`_
-   * - :doc:`Foxy Fitzroy <Releases/Release-Foxy-Fitzroy>`
-     - June 5, 2020
-     - |foxy|
-     - June 20, 2023
-     - `Jacob Perron <https://github.com/jacobperron>`_ / `Dharini Dutia <https://github.com/quarkytale>`_
-   * - :doc:`Eloquent Elusor <Releases/Release-Eloquent-Elusor>`
-     - November 22, 2019
-     - |eloquent|
-     - November 2020
-     - `Michael Carroll <https://github.com/mjcarroll>`_
-   * - :doc:`Dashing Diademata <Releases/Release-Dashing-Diademata>`
-     - May 31, 2019
-     - |dashing|
-     - May 2021
-     - `Steven! Ragnarök <https://github.com/nuclearsandwich>`_
-   * - :doc:`Crystal Clemmys <Releases/Release-Crystal-Clemmys>`
-     - December 14, 2018
-     - |crystal|
-     - December 2019
-     - `Steven! Ragnarök <https://github.com/nuclearsandwich>`_
-   * - :doc:`Bouncy Bolson <Releases/Release-Bouncy-Bolson>`
-     - July 2, 2018
-     - |bouncy|
-     - July 2019
-     - `Mikael Arguedas <https://github.com/mikaelarguedas>`_ / `Steven! Ragnarök <https://github.com/nuclearsandwich>`_
-   * - :doc:`Ardent Apalone <Releases/Release-Ardent-Apalone>`
-     - December 8, 2017
-     - |ardent|
-     - December 2018
-     - `Steven! Ragnarök <https://github.com/nuclearsandwich>`_
-   * - :doc:`beta3 <Releases/Beta3-Overview>`
-     - September 13, 2017
-     -
-     - December 2017
-     -
-   * - :doc:`beta2 <Releases/Beta2-Overview>`
-     - July 5, 2017
-     -
-     - September 2017
-     -
-   * - :doc:`beta1 <Releases/Beta1-Overview>`
-     - December 19, 2016
-     -
-     - Jul 2017
-     -
-   * - :doc:`alpha1 - alpha8 <Releases/Alpha-Overview>`
-     - August 31, 2015
-     -
-     - December 2016
-     -
-
-Future Distributions
---------------------
-
-For details on upcoming features see the :doc:`roadmap <../The-ROS2-Project/Roadmap>`.
-
-There is a new ROS 2 distribution released yearly on May 23rd (`World Turtle Day <https://www.worldturtleday.org/>`_).
-
-.. list-table::
-   :class: future-distros
-   :header-rows: 1
-   :widths: 35 30 20 15
-
-   * - Distro
-     - Release date
-     - Logo
-     - EOL date
-   * - :doc:`Makoa Mata-mata <Releases/Release-Makoa-Mata-mata>`
-     - May 2027
-     - TBD
-     - Dec 2028
-
-
-.. _rolling_distribution:
-
-Rolling Distribution
---------------------
-
-:doc:`ROS 2 Rolling Ridley <Releases/Release-Rolling-Ridley>` is the rolling development distribution of ROS 2.
-It is described in `REP 2002 <https://reps.openrobotics.org/rep-2002/>`_ and was first introduced in June 2020.
-
-The Rolling distribution of ROS 2 serves two purposes:
-
-1. it is a staging area for future stable distributions of ROS 2, and
-2. it is a collection of the most recent development releases.
-
-As the name implies, Rolling is continuously updated and **can have in-place updates that include breaking changes**.
-We recommend that most people use the most recent stable distribution instead (see :ref:`list_of_distributions`).
-
-Packages released into the Rolling distribution will be automatically released into future stable distributions of ROS 2.
-:doc:`Releasing a ROS 2 package <../Developer-Tools/Build/Releasing/Releasing-a-Package>` into the Rolling distribution follows the same procedures as all other ROS 2 distributions.
-
-Cross-Distribution Communications
----------------------------------
-
-Nodes are not guaranteed to be able to communicate across distributions.
-For example, a node built & running against Humble is not guaranteed to be able to communicate correctly with a node built & running against Iron.
-It may or may not work, but it is not supported and should not be relied upon.
-Note that :ref:`cross-vendor (single-distro) communications are also not guaranteed <different-middleware-vendors-cross-vendor-communication>`.
+   本页面不虚构未在 SDK 仓库中提供的版本号或发布日期。请将实际发布信息补充到此页，或在 SDK 仓库中维护正式 CHANGELOG。

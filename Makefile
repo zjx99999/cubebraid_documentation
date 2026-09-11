@@ -9,28 +9,20 @@ ifeq ($(OS),Windows_NT)
 endif
 BUILD      = $(PYTHON) -m sphinx
 JOBS       ?= auto
-# Attached form (-j<JOBS>, no space) so sphinx-multiversion forwards it to sphinx-build
-# instead of mistaking the value for a positional argument.
 OPTS       =-c . -W -j$(JOBS) # Treat warnings as errors, build in parallel ($(JOBS) workers)
-LIVE_HOST  ?= 0.0.0.0
-LIVE_PORT  ?= 2022
+LIVE_HOST  ?= localhost
+LIVE_PORT  ?= 8000
 
-DICTIONARIES := codespell_dictionary.txt codespell_whitelist.txt
+DICTIONARIES := codespell_whitelist.txt
 
 help:
 	@$(BUILD) -M help "$(SOURCE)" "$(OUT)" $(OPTS)
-	@echo "  multiversion to build documentation for all branches"
-
-multiversion: Makefile
-	sphinx-multiversion $(OPTS) "$(SOURCE)" build/html
-	@echo "<html><head><meta http-equiv=\"refresh\" content=\"0; url=lyrical/index.html\" /></head></html>" > build/html/index.html
-	$(PYTHON) make_sitemapindex.py
 
 %: Makefile
 	@$(BUILD) -M $@ "$(SOURCE)" "$(OUT)" $(OPTS)
 
 lint:
-	./sphinx-lint-with-ros source
+	sphinx-lint source
 
 test:
 	doc8 --ignore D001  --ignore-path $(OUT) -- $(SOURCE)
@@ -67,6 +59,6 @@ linkcheck:
 	@echo "Check finished. Report is in $(LINKCHECKDIR)."
 
 serve:
-	sphinx-autobuild --host $(LIVE_HOST) --port $(LIVE_PORT) -c . $(SOURCE) $(OUT)/html
+	$(PYTHON) serve_docs.py --host "$(LIVE_HOST)" --port "$(LIVE_PORT)" --directory "$(abspath $(OUT)/html)"
 
-.PHONY: help Makefile multiversion test test-tools linkcheck serve lint spellcheck check-dictionaries sort-dictionaries
+.PHONY: help Makefile test test-tools linkcheck serve lint spellcheck check-dictionaries sort-dictionaries
