@@ -1,7 +1,7 @@
 API 参考
 ========
 
-本节按照公开头文件整理模块 API。函数签名、枚举值、结构体字段和单位来自 ``D:\project\void_test\cubebraid_sdk\include\CubeBraidSDK`` 中的头文件；SDK 发布版本发生变化时，请以随版本发布的头文件为最终依据。
+本节按照公开头文件整理模块 API。函数签名、枚举值、结构体字段和单位来自 `CubeBraid SDK 仓库 <https://github.com/GJXS1980/cubebraid_sdk>`__ 的 ``include/CubeBraidSDK``；SDK 发布版本发生变化时，请以随版本发布的头文件为最终依据。
 
 公共约定
 --------

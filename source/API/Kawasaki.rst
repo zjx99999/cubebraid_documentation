@@ -30,6 +30,24 @@ C++ 接口
 
 ``BypassPoint`` 包含插值步骤 ``step_index``、调整后的 ``pose``（``[x, y, z, z1, y, z2]``）和触发原因 ``reason``。
 
+奇异点数据与处理
+----------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 38 62
+
+   * - 结构 / 方法
+     - 功能说明
+   * - ``BypassPoint``
+     - 记录发生奇异点的插值步索引 ``step_index``、调整后的安全位姿 ``pose`` 及触发原因 ``reason``。
+   * - ``check_and_bypass_singularity``
+     - 在指定插值步数内检测起点到终点的轨迹，发现奇异点后自动重构安全插值轨迹。
+   * - ``decompose_homogeneous_matrix``
+     - 将齐次变换矩阵分解为平移向量（mm）和 ZYZ 欧拉角（deg）。
+
+调用安全规避算法后，应用仍需检查返回轨迹、关节限位、工具姿态和碰撞区；算法结果不能替代机器人控制器的安全限制。
+
 关节限位
 --------
 
