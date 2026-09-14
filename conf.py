@@ -260,7 +260,7 @@ htmlhelp_basename = 'cubebraid_sdk_documentation'
 #
 # For local builds, this value does not affect the local HTTP server.
 
-html_baseurl = 'https://zjx99999.github.io/cubebraid_documentation/'
+html_baseurl = 'https://docs.xyzrpy.com/'
 
 
 # ============================================================================
