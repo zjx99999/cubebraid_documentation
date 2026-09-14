@@ -1,5 +1,16 @@
 {% extends "!layout.html" %}
 
 {% block sidebartitle %}
-    {{ super() }}
+    {%- set _root_doc = root_doc|default(master_doc) %}
+    <a href="{{ pathto(_root_doc) }}" class="icon icon-home">
+      {{ project }}
+    </a>
+
+    <div class="cubebraid-sidebar-logo">
+      <a href="{{ pathto(_root_doc) }}" aria-label="返回 CubeBraid 文档首页">
+        <img src="{{ pathto('_static/cubebraid-cube.png', 1) }}" alt="CubeBraid 方块标志" />
+      </a>
+    </div>
+
+    {%- include "searchbox.html" %}
 {% endblock %}
