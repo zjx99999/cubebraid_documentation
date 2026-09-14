@@ -1,5 +1,5 @@
-7. 配置文件解析模块（JsonParameter SDK）
-=========================================
+3.7 配置文件解析模块（JsonParameter SDK）
+===========================================
 
 头文件：``include/CubeBraidSDK/JsonSDK/JsonParameterSDK.h``
 
@@ -139,7 +139,68 @@ Json SDK 是纯 C ABI 的参数读写库，接口以文件路径、索引和输�
 
 失败后可使用 ``JsonParameterSDK_GetLastError(buffer, buffer_size)`` 读取文本错误信息。
 
-.. toctree::
-   :hidden:
+.. _parameter-configuration:
 
-   ../Guides/Configuration
+参数与配置文件
+--------------
+
+JsonSDK 使用 JSON 和 TXT 文件为装卸柜任务提供运行参数。SDK 仓库中的样例位于 ``scripts/JsonSDK/data``，包括 Keba 和 Kuka 命名的部分配置文件。
+
+文件与接口
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 35 30
+
+   * - 数据
+     - 典型文件
+     - 读取接口
+   * - 手眼标定
+     - ``Hand-eye_calibration_parameters.json``
+     - ``GetCalibration``
+   * - SKU
+     - ``sku_data.json``
+     - ``GetSku``
+   * - AGV 航向角
+     - ``agv_angle.json``
+     - ``GetAgvAngle``
+   * - 机器人位姿
+     - ``setting_parameters.json`` / ``RobotPose.json``
+     - ``GetRobotPose``
+   * - 倾角仪端口
+     - ``setting_parameters.json``
+     - ``GetInclinometerPort``
+   * - 机器人状态
+     - ``robot_data.json``
+     - ``GetRobotState`` / ``InitRobotData``
+   * - 垛型
+     - ``rd_demo_data_keba.json`` / ``rd_demo_data_kuka.json``
+     - ``GetPalletizingPatternData``
+   * - 续码
+     - ``continuation_config.txt``
+     - ``GetContinuationConfig``
+   * - 特殊面补偿
+     - ``test_demo.json``
+     - ``GetStackStyleDiffX``
+
+持久化与续码
+~~~~~~~~~~~~
+
+``RobotState`` 与 ``ContinuationConfig`` 记录工作模式、当前面、当前层、当前动作及完成数量。发生可恢复中断时，应用应先读取并校验这些状态，再决定是否继续任务；不要在动作执行中无条件调用 ``InitRobotData``。
+
+``JsonParameterSDK_SetJsonInt``、``JsonParameterSDK_SetJsonFloat`` 和 ``JsonParameterSDK_SetJsonString`` 会直接写入配置文件。生产环境应先备份文件、校验字段范围并记录修改来源。
+
+Python 调用例程
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from json_parameter_sdk import JsonParameterSDK
+
+   sdk = JsonParameterSDK()
+   calib = sdk.get_calibration(
+       "./data/json/Hand-eye_calibration_parameters.json", cam_mode=0)
+   sku = sdk.get_sku("./data/json/sku_data.json", sku_index=0)
+   print(f"标定 X/Y/Z: {calib.x}, {calib.y}, {calib.z}")
+   print(f"SKU 尺寸: {sku.length} x {sku.width} x {sku.height}")

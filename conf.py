@@ -217,6 +217,9 @@ html_static_path = [
 # Drop any source link suffix.
 html_sourcelink_suffix = ''
 
+# Do not expose source-file links in the page header.
+html_show_sourcelink = False
+
 
 # Relative to html_static_path.
 #

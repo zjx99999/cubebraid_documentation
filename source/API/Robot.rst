@@ -1,5 +1,5 @@
-4. 机器人抓取控制与位姿补偿模块（Robot SDK）
-==============================================
+3.4 机器人抓取控制与位姿补偿模块（Robot SDK）
+================================================
 
 头文件：``include/CubeBraidSDK/RobotSDK/RobotSDK.h``
 
@@ -88,3 +88,20 @@ C ABI
 .. warning::
 
    虽然这些函数位于 ``extern "C"`` 区域，补偿函数的参数仍包含 ``robot_sdk::Pose`` 和 ``robot_sdk::BoxDimension`` 等 C++ 类型。使用 Python ``ctypes`` 或其他 FFI 前，必须以实际导出 ABI 验证结构体布局；不能仅凭函数名判断它是纯 C 兼容接口。
+
+Python 位姿补偿示例
+--------------------
+
+以下示例只计算目标位姿，不连接机器人，可用于先核对基准点、SKU 尺寸、抓取模式和单位：
+
+.. code-block:: python
+
+   from robot_sdk import RobotClient, Pose, BoxDimension
+
+   target = RobotClient.top_suction_angle(
+       centroid=Pose(1.463, 1.524, -0.611),
+       box=BoxDimension(570.0, 453.0, 330.0),
+       fetch_mode=3, sku_num=1, dis_y=75.0,
+       pose_offset=Pose(-570.0, -453.0, 330.0),
+       R_offset=True, model_mod=0)
+   print(f"目标位姿: {target}")

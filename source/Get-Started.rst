@@ -16,4 +16,4 @@
 #. 从 `CubeBraid SDK GitHub 仓库 <https://github.com/GJXS1980/cubebraid_sdk>`__ 获取 SDK。
 #. 按 :doc:`安装与构建 <Get-Started/Installation>` 生成 demo 并准备 DLL 搜索路径。
 #. 使用 :doc:`第一个程序 <Get-Started/Quickstart>` 验证参数读取或纯算法调用。
-#. 根据设备进入 :doc:`模块总览 <Submodules>` 和对应 API 页面。
+#. 根据设备进入 :ref:`模块总览 <module-overview>` 和对应 API 页面。

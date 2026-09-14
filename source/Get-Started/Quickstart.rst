@@ -75,4 +75,4 @@ SDK demo 使用的参数样例位于仓库的 ``scripts/JsonSDK/data``。如果�
 #. 先读取状态，再发送最小、可回收的测试指令。
 #. 在异常和退出路径中断开连接并销毁句柄。
 
-具体的连接和控制接口请进入 :doc:`模块总览 <../Submodules>`。涉及真实运动时，必须先阅读 :doc:`安全须知 <../Guides/Safety>`。
+具体的连接和控制接口请进入 :ref:`模块总览 <module-overview>`。涉及真实运动时，必须先阅读 :doc:`安全须知 <../Guides/Safety>`。

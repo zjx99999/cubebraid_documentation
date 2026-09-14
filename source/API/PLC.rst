@@ -1,5 +1,5 @@
-5. 电气控制与 PLC 交互模块（PLC SDK）
-======================================
+3.5 电气控制与 PLC 交互模块（PLC SDK）
+========================================
 
 头文件：``include/CubeBraidSDK/PLC_SDK/PLC_SDK.h``
 
@@ -97,3 +97,25 @@ Python 映射
 Python demo 将 ``PLCStatus`` 和 ``PickUpData`` 都设置为 ``_pack_ = 1``，并且先加载 ``snap7.dll`` 再加载 ``PLC_SDK.dll``。缺少 Snap7、结构体未对齐或 DLL 位数不匹配都会导致加载或数据读取失败。
 
 PLC 输出接口会改变现场状态，联调时必须配合 PLC 程序、信号表和安全回路逐项核对，不能仅凭 ``void`` 返回类型判断已完成。
+
+Python 调用例程
+--------------------------
+
+Python 侧必须在加载 ``PLC_SDK.dll`` 前确保 ``snap7.dll`` 可被找到，并为 ``PLCStatus`` 和 ``PickUpData`` 设置 ``_pack_ = 1``：
+
+.. code-block:: python
+
+   from plc_sdk import PLCClient, PickUpData
+
+   plc = PLCClient("192.168.30.49")
+   if plc.connect():
+       try:
+           plc.trigger_init()
+           plc.send_pickup_data(PickUpData(
+               fetch_mode=4, mode_switch=2,
+               sku_l=600, sku_w=500, sku_h=400,
+               sku_num=1, sku_weight=5.5))
+           status = plc.get_status()
+           print(status.suction_cup_state, status.fixture_state)
+       finally:
+           plc.disconnect()

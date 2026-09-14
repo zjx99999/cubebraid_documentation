@@ -1,5 +1,5 @@
-2. 3D视觉与基准点感知模块（Camera3D SDK）
-===========================================
+3.2 3D视觉与基准点感知模块（Camera3D SDK）
+=============================================
 
 头文件：``include/CubeBraidSDK/CameraSDK/CameraSDK.h``
 
@@ -93,3 +93,27 @@ CameraSDK 面向装卸柜视觉定位和几何计算。公开头文件提供 C++
 * ``statusToString(status)``：将状态码转换为可读字符串。
 
 头文件当前未声明 Camera3D 的 C ABI。Python 脚本的 C ABI 映射属于仓库脚本实现，若要作为稳定公共接口使用，应在发布头文件中补齐并固定 C 结构体声明。
+
+Python 调用例程
+--------------------------
+
+SDK 脚本中的 Python 封装可按下例调用。相机地址、标定参数和坐标必须使用现场配置；在当前 DLL 的导出符号与脚本不一致时，应以 C++ 接口为准。
+
+.. code-block:: python
+
+   from camera_sdk import Camera3DSDK, Camera3DCalibrationPose
+
+   calib = Camera3DCalibrationPose(
+       x=0.12, y=-0.05, z=0.85,
+       qw=1.0, qx=0.0, qy=0.0, qz=0.0)
+
+   with Camera3DSDK() as camera:
+       point = camera.process_tradition(
+           pose=calib, camera_ip="192.168.23.203", model_mod=0,
+           agv_x=1.25, agv_y=0.85, angle=0.3,
+           j1_angle=15.0, integrated_mode=False)
+       yaw_deg = camera.process_yaw(
+           pose=calib, camera_ip="192.168.23.88",
+           slam_x=1.25, slam_y=0.85, j1_angle=15.0,
+           integrated_mode=False)
+       print(point, yaw_deg)

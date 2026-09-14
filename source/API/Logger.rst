@@ -1,5 +1,5 @@
-8. 日志记录与安全监控模块（Logger SDK）
-========================================
+3.8 日志记录与安全监控模块（Logger SDK）
+==========================================
 
 头文件：``include/CubeBraidSDK/LoggerSDK/LoggerSDK.h``
 
@@ -30,3 +30,17 @@ C ABI
    void logger_emergency_stop(const char* instance_name, const char* reason);
 
 ``instance_name`` 传入空字符串或 NULL 时，头文件说明使用默认名称 ``systemlogger``。调用方应在初始化前创建日志目录，并避免把密码、密码哈希和生产敏感数据写入日志。
+
+Python 调用例程
+--------------------------
+
+Python 策略层可以使用与 C++ 相同的日志等级和紧急停止语义。紧急停止日志用于记录原因，不应替代现场急停控制。
+
+.. code-block:: python
+
+   from logger_sdk import SystemLogger
+
+   logger = SystemLogger.get_instance()
+   logger.init("log/py_logger.log")
+   logger.log("Python 策略脚本开始运行")
+   logger.emergency_stop("检测到安全光幕触发")

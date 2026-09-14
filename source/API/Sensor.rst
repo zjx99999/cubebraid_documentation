@@ -1,5 +1,5 @@
-6. 车体姿态感知模块（Inclinometer SDK）
-========================================
+3.6 车体姿态感知模块（Inclinometer SDK）
+==========================================
 
 头文件：``include/CubeBraidSDK/SensorSDK/InclinometerSDK.h``
 
@@ -64,3 +64,13 @@ Python 示例
 -----------
 
 ``scripts/SensorSDK/inclinometer.py`` 通过 ``ctypes.CDLL`` 加载 DLL，并提供 ``start``、``get_angle``、``reset_angle`` 和 ``close``。示例使用 ``\\.\COM9``，该串口号只应作为格式示例，现场必须替换为实际设备端口。
+
+.. code-block:: python
+
+   from inclinometer_sdk import InclinometerSDK
+
+   sensor = InclinometerSDK(port="COM9", baud_rate=9600)
+   if sensor.start():
+       x, y = sensor.get_angle()
+       print(f"倾角 X: {x:.2f}°, Y: {y:.2f}°")
+       sensor.stop()

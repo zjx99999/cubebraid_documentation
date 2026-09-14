@@ -12,7 +12,7 @@
 * 运动和 PLC 输出接口应在独立的安全层中增加限位、超时、状态联锁和急停处理。
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    API/AGV
    API/Camera

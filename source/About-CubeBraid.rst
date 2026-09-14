@@ -73,6 +73,46 @@ SDK 当前头文件和 demo 覆盖以下任务：
 
 当前 SDK 发行目录提供 Windows ``.dll`` 和 ``.lib`` 文件，以及头文件和 demo。头文件包含跨平台导出宏，但如果要在 Linux 上部署，还需要对应的 ``.so`` 动态库和运行时依赖；仅有 Windows 二进制文件不能直接完成 Linux 构建。
 
+.. _container-workflow:
+
+典型装卸柜业务流程
+--------------------
+
+CubeBraid SDK 将参数、感知、位姿计算、设备控制和状态持久化组合为装卸柜任务。以下顺序描述软件协同关系；实际 PLC、机器人和安全回路的动作顺序仍必须以现场控制逻辑和安全评审为准。
+
+任务数据准备
+~~~~~~~~~~~~
+
+任务开始时，使用 JsonSDK 读取：
+
+* 手眼标定 ``CalibrationPose``；
+* SKU 长、宽、高和重量 ``SkuData``；
+* 机器人取料/放料位姿 ``RobotPose``；
+* 当前机器人状态 ``RobotState``；
+* 面数、层数、动作号和 AGV 模式 ``ContinuationConfig``；
+* 当前垛型、抓取模式、吸取方式、集装箱尺寸和偏移量 ``PalletizingPatternData``。
+
+如果任务从断点恢复，还应先读取并校验 JSON/TXT 中的面、层和动作状态，再决定是否继续动作。
+
+感知、计算与设备协同
+~~~~~~~~~~~~~~~~~~~~~~
+
+#. 启动 Inclinometer，读取 X/Y 倾角并确认 ``isRunning()``。
+#. 连接 Camera3D；根据项目模式选择主相机或上相机，调用 ``processTradition`` 计算集装箱内部或斜坡基准点。
+#. 最后一面侧吸时调用 ``processLastSurface``；需要修正 AGV 航向时调用 ``processYaw``，并检查状态码和 yaw 输出。
+#. 使用 RobotSDK 的 ``Top_suction_angle``、``Top_suction_special`` 或 ``Side_suction_angle``，将视觉基准点、SKU、垛型偏移和倾角转换为目标位姿。
+#. 通过 PLC_SDK 同步取料参数、吸盘/底托信号、摆台角度和装柜进度；通过 AGV_SDK 完成定位移动与位姿查询。
+#. 发送机器人运动指令前检查奇异点、限位和现场状态；每个动作完成后再更新面、层、动作和数量状态。
+
+CameraSDK 的 ``CalibrationPose`` 与 ``Point3D`` 示例使用米，RobotSDK 目标 ``Pose`` 使用毫米；跨模块传递数据时必须显式完成单位换算。发生超时、状态不一致或倾角异常时，停止后续动作、记录上下文，并进入项目定义的安全恢复流程。
+
+建议的状态机
+~~~~~~~~~~~~
+
+``准备参数`` → ``设备自检`` → ``AGV 定位`` → ``视觉定位`` → ``计算目标`` → ``PLC 握手`` → ``机器人取/放料`` → ``更新状态`` → ``下一箱/下一层``
+
+每个状态转换都应由实际设备反馈确认，不能仅依据“指令发送成功”继续下一步。
+
 .. seealso::
 
-   :doc:`SDK 架构 <SDK-Architecture>`、:doc:`装卸柜工作流 <Guides/Container-Workflow>` 和 :doc:`安装与构建 <Get-Started/Installation>`。
+   :doc:`系统架构设计 <SDK-Architecture>`、:doc:`C/C++ 动态导出库设计规范 <Library-Export>` 和 :doc:`安装与构建 <Get-Started/Installation>`。
