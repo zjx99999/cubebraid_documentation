@@ -1,7 +1,7 @@
 CubeBraid 装卸柜机器人技术文档
 ==============================
 
-CubeBraid SDK 面向集装箱装卸柜机器人系统，提供 AGV、工业相机、机器人、PLC、倾角仪、运动学、参数管理和日志等基础能力。本站内容以 CubeBraid SDK 的公开头文件、示例程序和脚本，以及《CubeBraid SDK 技术文档》中的系统设计说明为准。
+CubeBraid SDK 面向集装箱装卸柜机器人系统，提供 AGV、工业相机、机器人、PLC、倾角仪、运动学、参数管理和日志等基础能力。本站内容以 CubeBraid SDK 的公开头文件、示例程序和脚本为准。
 
 .. toctree::
    :titlesonly:
