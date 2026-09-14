@@ -5,8 +5,8 @@
 
 Json SDK 是纯 C ABI 的参数读写库，接口以文件路径、索引和输出结构体为主，适合 C/C++、Python ``ctypes`` 和其他 FFI 调用。
 
-生命周期
---------
+3.7.1 配置文件解析与参数映射
+-----------------------------
 
 所有其他接口前调用：
 
@@ -21,7 +21,7 @@ Json SDK 是纯 C ABI 的参数读写库，接口以文件路径、索引和输�
    JsonParameterSDK_Uninitialize();
 
 数据结构
---------
+~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -50,7 +50,7 @@ Json SDK 是纯 C ABI 的参数读写库，接口以文件路径、索引和输�
      - 垛型与装柜计算输入。
 
 查询接口
---------
+~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -84,7 +84,7 @@ Json SDK 是纯 C ABI 的参数读写库，接口以文件路径、索引和输�
 ``GetContinuationSurfaceLayer`` 的头文件声明顺序是 ``layer_num`` 后 ``surface_num``。仓库 C++ demo 中变量名与传参顺序容易造成误解，集成代码应按头文件原型传递指针。
 
 修改接口
---------
+~~~~~~~~
 
 * ``JsonParameterSDK_InitRobotData(file_path)``：初始化机器人状态文件；
 * ``JsonParameterSDK_SetJsonInt(file_path, field_name, value)``；
@@ -94,7 +94,7 @@ Json SDK 是纯 C ABI 的参数读写库，接口以文件路径、索引和输�
 这些接口会写入配置文件。生产系统应在写入前备份并校验字段范围，避免在机器人动作执行期间无条件重置状态。
 
 错误码
-------
+~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -142,12 +142,12 @@ Json SDK 是纯 C ABI 的参数读写库，接口以文件路径、索引和输�
 .. _parameter-configuration:
 
 参数与配置文件
---------------
+~~~~~~~~~~~~~~
 
 JsonSDK 使用 JSON 和 TXT 文件为装卸柜任务提供运行参数。SDK 仓库中的样例位于 ``scripts/JsonSDK/data``，包括 Keba 和 Kuka 命名的部分配置文件。
 
 文件与接口
-~~~~~~~~~~
+^^^^^^^^^^
 
 .. list-table::
    :header-rows: 1
@@ -184,15 +184,30 @@ JsonSDK 使用 JSON 和 TXT 文件为装卸柜任务提供运行参数。SDK 仓
      - ``test_demo.json``
      - ``GetStackStyleDiffX``
 
-持久化与续码
-~~~~~~~~~~~~
+3.7.2 机器人状态持久化与续码
+-----------------------------
 
 ``RobotState`` 与 ``ContinuationConfig`` 记录工作模式、当前面、当前层、当前动作及完成数量。发生可恢复中断时，应用应先读取并校验这些状态，再决定是否继续任务；不要在动作执行中无条件调用 ``InitRobotData``。
 
 ``JsonParameterSDK_SetJsonInt``、``JsonParameterSDK_SetJsonFloat`` 和 ``JsonParameterSDK_SetJsonString`` 会直接写入配置文件。生产环境应先备份文件、校验字段范围并记录修改来源。
 
-Python 调用例程
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+3.7.3 C++ 调用例程（jsonsdk_demo.cpp）
+----------------------------------------
+
+.. code-block:: cpp
+
+   if (JsonParameterSDK_Initialize() != JSONPARAM_SDK_SUCCESS) return -1;
+
+   CalibrationPose pose{};
+   JsonParameterSDK_GetCalibration(
+       "./data/json/Hand-eye_calibration_parameters.json", 0, &pose);
+
+   SkuData sku{};
+   JsonParameterSDK_GetSku("./data/json/sku_data.json", 0, &sku);
+   JsonParameterSDK_Uninitialize();
+
+3.7.4 Python 调用例程（jsonsdk_demo.py）
+------------------------------------------
 
 .. code-block:: python
 

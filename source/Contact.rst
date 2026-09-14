@@ -4,9 +4,8 @@
 技术支持入口
 ------------
 
-* `CubeBraid 官方网站 <https://www.cubebraid.com/>`__
+* `CubeBraid 官方网站 <https://www.rossum-robot.com/product/776.html>`__
 * `CubeBraid SDK 源码仓库 <https://github.com/GJXS1980/cubebraid_sdk>`__
-* `文档仓库 Issues <https://github.com/zjx99999/cubebraid_documentation/issues>`__
 
 提交问题时请提供：
 

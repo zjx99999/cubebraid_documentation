@@ -7,8 +7,8 @@
 
 SensorSDK 通过串口采集 DXL360 倾角仪的 X/Y 角度，支持自动重连、运行状态查询和角度归零。
 
-配置与数据
-----------
+3.6.1 倾角仪配置与通信
+-----------------------
 
 ``InclinometerConfig`` 字段：
 
@@ -22,8 +22,8 @@ SensorSDK 通过串口采集 DXL360 倾角仪的 X/Y 角度，支持自动重连
 
 ``AngleData`` 包含 ``x``、``y`` 和 ``time``，X/Y 角度单位为度。
 
-C++ 接口
---------
+3.6.2 角度数据获取与重置
+-------------------------
 
 .. code-block:: cpp
 
@@ -44,7 +44,7 @@ C++ 接口
 公开方法：``start``、``stop``、``isRunning``、``getXAngle``、``getYAngle``、``getAngle`` 和 ``resetAngle``。类禁止拷贝，应用应确保停止后再销毁对象。
 
 C ABI
------
+~~~~~
 
 .. code-block:: cpp
 
@@ -60,8 +60,24 @@ C ABI
    void Inclinometer_ResetAngle(void* handle);
    const char* Inclinometer_GetVersion();
 
-Python 示例
------------
+3.6.3 C++ 调用例程（sensorsdk_demo.cpp）
+------------------------------------------
+
+.. code-block:: cpp
+
+   InclinometerSDK::Inclinometer sensor;
+   InclinometerSDK::InclinometerConfig config;
+   config.port = "\\\\.\\COM9";
+   config.baudRate = 9600;
+   if (sensor.start(config)) {
+       float x = 0.0f;
+       float y = 0.0f;
+       sensor.getAngle(x, y);
+       sensor.stop();
+   }
+
+3.6.4 Python 调用例程（sensorsdk_demo.py）
+--------------------------------------------
 
 ``scripts/SensorSDK/inclinometer.py`` 通过 ``ctypes.CDLL`` 加载 DLL，并提供 ``start``、``get_angle``、``reset_angle`` 和 ``close``。示例使用 ``\\.\COM9``，该串口号只应作为格式示例，现场必须替换为实际设备端口。
 

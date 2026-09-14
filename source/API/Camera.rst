@@ -7,8 +7,8 @@
 
 CameraSDK 面向装卸柜视觉定位和几何计算。公开头文件提供 C++ ``Camera3D`` 类，使用 PImpl 隐藏实现；SDK 仓库的 Python 脚本还尝试绑定 ``Camera3D_Create`` 等 C 导出符号，使用前应确认当前 DLL 确实导出了这些符号。
 
-状态码
-------
+3.2.1 视觉系统硬件与网络配置
+-----------------------------
 
 ``StatusCode``：
 
@@ -45,14 +45,14 @@ CameraSDK 面向装卸柜视觉定位和几何计算。公开头文件提供 C++
      - 内部错误。
 
 数据结构
---------
+~~~~~~~~
 
 * ``Point3D``：``float x/y/z`` 三维点；算法 demo 以米打印结果。
 * ``CalibrationPose``：``x/y/z`` 为米，``qw/qx/qy/qz`` 为四元数姿态。
 * ``CameraConfig``：主相机 ``camera_ip``、装卸一体模式的上相机 ``camera_ip_up``、深度文件和颜色文件路径。
 
 初始化与连接
-------------
+~~~~~~~~~~~~
 
 .. code-block:: cpp
 
@@ -71,8 +71,8 @@ CameraSDK 面向装卸柜视觉定位和几何计算。公开头文件提供 C++
 
 也可以使用 ``isConnected``、``getLastStatus`` 和 ``getLastError`` 诊断连接或算法失败。``Camera3D`` 禁止拷贝，但支持移动构造和移动赋值。
 
-业务算法
---------
+3.2.2 集装箱与斜坡基准点定位算法
+---------------------------------
 
 ``processTradition``：
 
@@ -86,7 +86,10 @@ CameraSDK 面向装卸柜视觉定位和几何计算。公开头文件提供 C++
 
 ``model_mod`` 为 ``0`` 时表示第一面顶吸基准点，``1`` 表示其他面；``integrated_load_unload_mode`` 为 ``true`` 表示装卸一体模式，``false`` 表示摆台模式。``agv_x``、``agv_y``、``angle`` 和 ``j1_angle`` 的含义必须与现场坐标及标定流程一致。
 
-其他算法接口：
+3.2.3 集装箱加强筋法向与 AGV 航向角补偿
+-----------------------------------------
+
+最后一面侧吸和加强筋法向计算需要结合当前 AGV 坐标、机械臂一轴角度和项目模式判断：
 
 * ``processLastSurface(calib_pose, cameraIP, agv_x, agv_y, j1_angle, integrated_mode, result)``：最后一面侧吸基准点；
 * ``processYaw(calib_pose, cameraIP, slam_x, slam_y, j1_angle, integrated_mode, yaw)``：加强筋法向和 AGV 航向角偏差，输出 yaw 为度；失败或误差过大时，头文件说明可能返回 ``90.0`` 作为异常结果；
@@ -94,8 +97,27 @@ CameraSDK 面向装卸柜视觉定位和几何计算。公开头文件提供 C++
 
 头文件当前未声明 Camera3D 的 C ABI。Python 脚本的 C ABI 映射属于仓库脚本实现，若要作为稳定公共接口使用，应在发布头文件中补齐并固定 C 结构体声明。
 
-Python 调用例程
---------------------------
+3.2.4 C++ 调用例程（CameraSDK_demo.cpp）
+-------------------------------------------
+
+.. code-block:: cpp
+
+   camera3d_sdk::Camera3D camera;
+   camera3d_sdk::CalibrationPose calib{0.072f, -0.245f, 0.557f,
+                                        -0.625f, 0.153f, 0.353f, -0.679f};
+   camera3d_sdk::Point3D benchmark;
+   camera.processTradition(
+       calib, "192.168.23.203", 0,
+       1.348f, 0.395f, 1.35f, -155.69f,
+       true, benchmark);
+
+   double yaw_bias = 0.0;
+   camera.processYaw(
+       calib, "192.168.23.88",
+       1.348f, 0.395f, -155.69f, true, yaw_bias);
+
+3.2.5 Python 调用例程（camera_sdk_demo.py）
+---------------------------------------------
 
 SDK 脚本中的 Python 封装可按下例调用。相机地址、标定参数和坐标必须使用现场配置；在当前 DLL 的导出符号与脚本不一致时，应以 C++ 接口为准。
 

@@ -7,8 +7,8 @@
 
 PLC_SDK 基于 Snap7 客户端连接 PLC，提供 DB 块安全读写、装卸柜离散信号、取料参数发送和实时状态缓存。公开目录中 PLC 模块还依赖 ``bin/snap7.dll``。
 
-数据结构
---------
+3.5.1 Siemens S7 通信与数据结构定义
+------------------------------------
 
 ``PLCStatus`` 使用 ``#pragma pack(push, 1)``，包含 10 个 ``int16_t`` 状态字段：
 
@@ -24,8 +24,8 @@ PLC_SDK 基于 Snap7 客户端连接 PLC，提供 DB 块安全读写、装卸柜
 
 ``PickUpData`` 同样按 1 字节对齐，包含 ``fetch_mode``、``mode_switch``、SKU 长宽高、``sku_num`` 和单箱重量 ``sku_weight``。尺寸单位为 mm，重量单位为 kg。
 
-C++ 接口
---------
+3.5.2 DB 块读写与离散信号控制
+-------------------------------
 
 .. code-block:: cpp
 
@@ -57,7 +57,7 @@ C++ 接口
 * 初始化：``triggerPLCInit``、``triggerTableInit``。
 
 C ABI
------
+~~~~~
 
 C 接口使用 ``PLC_HANDLE``：
 
@@ -91,8 +91,24 @@ C 接口使用 ``PLC_HANDLE``：
    bool plc_trigger_plc_init(PLC_HANDLE handle);
    bool plc_trigger_table_init(PLC_HANDLE handle);
 
-Python 映射
------------
+3.5.3 C++ 调用例程（plc_sdk_demo.cpp）
+---------------------------------------
+
+.. code-block:: cpp
+
+   plc_sdk::PLCController plc;
+   if (!plc.connect("192.168.30.49", 0, 1)) return -1;
+   plc.triggerPLCInit();
+   plc_sdk::PickUpData data{4, 2, 600.0, 500.0, 400.0, 1, 5.5};
+   plc.sendPickUpData(data);
+   plc.setOpenSuctionCup(true);
+   plc.setFixtureRollOut(true);
+   plc.updateBoxState(6, 9, 4);
+   const auto status = plc.getStatus();
+   plc.disconnect();
+
+3.5.4 Python 调用例程（plc_sdk_demo.py）
+------------------------------------------
 
 Python demo 将 ``PLCStatus`` 和 ``PickUpData`` 都设置为 ``_pack_ = 1``，并且先加载 ``snap7.dll`` 再加载 ``PLC_SDK.dll``。缺少 Snap7、结构体未对齐或 DLL 位数不匹配都会导致加载或数据读取失败。
 

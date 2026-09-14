@@ -5,8 +5,8 @@
 
 ``AGVController`` 通过 TCP 连接 AGV 控制器，内部维护接收线程和心跳线程。接口支持 C++ 对象方式，也导出以 ``AGV_Handle`` 为核心的 C ABI。
 
-数据类型
---------
+3.1.1 AGV 结构与状态通信协议
+-----------------------------
 
 ``AGVPose`` 包含 ``x``、``y``、``z``、``roll``、``pitch``、``yaw`` 六个 ``double`` 字段。仓库 demo 将 ``roll`` 和 ``pitch`` 输出为 AGV 前方/左侧距离；实际坐标含义应以 AGV 控制器协议和现场坐标系为准。
 
@@ -36,9 +36,12 @@
      - rad
 
 通信线程
---------
+~~~~~~~~
 
 连接后，AGV 模块通过后台接收线程 ``receiveLoop`` 接收 TCP 数据，并由 ``parseDataStream`` 完成数据流的拆包与粘包解析；``heartbeatLoop`` 定时调用 ``sendHeartBeatsMsg`` 维持系统心跳。断开或销毁对象时应确保这些线程已经停止。
+
+3.1.2 控制模式与运动指令接口
+-----------------------------
 
 ``ControlMode`` 枚举值：
 
@@ -56,8 +59,8 @@
      - 3
      - 自动位移控制。
 
-C++ 生命周期与连接
-------------------
+连接与状态
+~~~~~~~~~~
 
 .. code-block:: cpp
 
@@ -79,7 +82,7 @@ C++ 生命周期与连接
 生产环境不要直接使用 demo 中的 IP、用户名或密码哈希。登录接口的第二个参数是已经计算好的 ``password_hash`` 字符串，哈希算法和凭据管理不由此接口定义。
 
 运动与状态接口
---------------
+~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -127,8 +130,8 @@ C++ 生命周期与连接
 
 ``goBack`` 的正负方向由 AGV 控制器协议定义；仓库 C++/Python demo 使用 ``+500`` 表示单步前进、``-500`` 表示单步后退，集成前应在现场确认。
 
-C ABI
------
+3.1.3 C-API 跨语言封装接口
+---------------------------
 
 .. code-block:: cpp
 
@@ -148,10 +151,29 @@ C ABI
    bool AGV_SendHeartBeatsMsg(AGV_Handle handle);
    C_AGVPose AGV_GetPose(AGV_Handle handle);
 
-Python 封装中的 ``AGVClient`` 还提供 ``move_manual_for_duration``，会在 ``finally`` 中发送 ``0, 0, 0`` 停止指令。网络中断或控制器异常时，应用仍必须依赖现场安全回路和人工急停。
+3.1.4 C++ 调用例程（agv_sdk_demo.cpp）
+----------------------------------------
 
-Python 调用例程
-----------------
+下例展示自动前进、位姿读取和手动速度控制的完整调用顺序。示例地址和凭据仅用于说明格式，必须替换为现场安全配置：
+
+.. code-block:: cpp
+
+   agv_sdk::AGVController agv;
+   if (!agv.connectAGV("192.168.1.91", 5005)) return -1;
+   if (!agv.login("<username>", "<password_hash>")) return -1;
+
+   agv.switchControlMode(agv_sdk::ControlMode::Auto);
+   agv.querySystemState();
+   const auto pose = agv.getPose();
+   agv.goForward(1800.0, 100000);
+
+   agv.switchControlMode(agv_sdk::ControlMode::Manual);
+   agv.moveManualForDuration(100.0f, 0.0f, 0.0f, 2000, 50);
+   agv.logout();
+   agv.disconnectAGV();
+
+3.1.5 Python 调用例程（agv_sdk_demo.py）
+------------------------------------------
 
 下面的示例只展示调用顺序。设备地址、用户名和密码哈希必须替换为现场安全配置，不能直接复制到生产程序：
 
