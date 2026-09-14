@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
 # CubeBraid 装卸柜机器人技术文档构建配置。
-# 页面采用 ROS 2 Documentation 使用的 Sphinx + Read the Docs 模板，
-# 内容仅面向 CubeBraid SDK，不再构建原始 ROS 2 内容。
+# 页面使用 Sphinx + Read the Docs 主题构建，
+# 内容仅面向 CubeBraid SDK。
 #
 # This file is executed with the current directory set to its
 # containing directory.
@@ -63,7 +63,7 @@ copyright = '{}, {}'.format(time.strftime('%Y'), author)
 #
 # |version| and |release| can be used in the documentation.
 # These values are intentionally kept simple because this project
-# does not use ROS 2 distribution/version management.
+# does not use multi-version distribution management.
 
 # The short X.Y version.
 version = '1.0'
@@ -293,7 +293,7 @@ def setup(app):
     Sphinx 扩展初始化函数。
 
     这里仅保留 CubeBraid SDK Documentation 所需要的基础配置，
-    不再使用 ROS 2 documentation 中的多版本、发行版和重定向机制。
+    不使用多版本、发行版和重定向机制。
     """
 
     # 注册 SDK 相关配置参数
