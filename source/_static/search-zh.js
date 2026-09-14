@@ -93,6 +93,63 @@
         });
       }
 
+      // Search results should follow the documentation's reading path after
+      // direct title hits. Sphinx normally breaks score ties by internal file
+      // name, which can put chapters 5/6 ahead of chapter 4.
+      const navigationOrder = [
+        'System-Architecture',
+        'SDK-Architecture',
+        'About-CubeBraid',
+        'Guides/Container-Workflow',
+        'Library-Export',
+        'Submodules',
+        'Get-Started',
+        'Get-Started/Installation',
+        'Get-Started/Quickstart',
+        'API-Reference',
+        'API/AGV',
+        'API/Camera',
+        'API/Kawasaki',
+        'API/Robot',
+        'API/PLC',
+        'API/Sensor',
+        'API/Json',
+        'API/Logger',
+        'Integration-and-Deployment',
+        'Guides/Python-Integration',
+        'Guides/System-Integration',
+        'Guides/Deployment',
+        'Developer-Tools',
+        'Guides/Configuration',
+        'Guides/Safety',
+        'Releases',
+        'Migration-and-Upgrades',
+        'Contact',
+      ];
+      const navigationRank = new Map(
+        navigationOrder.map((docname, position) => [docname, position]),
+      );
+      const docRank = (result) => navigationRank.get(result[0]) ?? Number.MAX_SAFE_INTEGER;
+      const isDirectTitleMatch = (result) => (
+        String(result[1] || '').toLowerCase().includes(queryLower)
+      );
+      const compareForDisplay = (left, right) => {
+        const titleMatchDifference = Number(isDirectTitleMatch(right)) - Number(isDirectTitleMatch(left));
+        if (titleMatchDifference) return titleMatchDifference;
+
+        const navigationDifference = docRank(left) - docRank(right);
+        if (navigationDifference) return navigationDifference;
+
+        const scoreDifference = right[4] - left[4];
+        if (scoreDifference) return scoreDifference;
+
+        return String(left[0]).localeCompare(String(right[0]));
+      };
+
+      // Search displays results with ``pop()``, so keep the highest-priority
+      // item at the end of the array.
+      results.sort((left, right) => compareForDisplay(right, left));
+
       return results;
     };
   }
