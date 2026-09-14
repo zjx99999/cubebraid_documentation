@@ -13,13 +13,13 @@ CubeBraid SDK 面向集装箱装卸柜机器人系统，提供 AGV、工业相�
    :maxdepth: 2
    :hidden:
 
-   System-Architecture
-   Get-Started
-   API-Reference
-   Integration-and-Deployment
-   Guides/Safety
-   Releases
-   Contact
+   系统总体架构与工程设计 <System-Architecture>
+   快速入门 <Get-Started>
+   SDK 参考 <API-Reference>
+   跨语言集成与部署指南 <Integration-and-Deployment>
+   安全须知 <Guides/Safety>
+   版本与变更 <Releases>
+   联系与支持 <Contact>
 
 快速开始
 --------

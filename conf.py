@@ -181,7 +181,7 @@ html_theme_options = {
 
 html_context = {
     # GitHub 仓库信息
-    'display_github': True,
+    'display_github': False,
     'github_user': 'zjx99999',
     'github_repo': 'cubebraid_documentation',
     # The RTD theme concatenates this value directly with the source path.
