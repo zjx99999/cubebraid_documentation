@@ -1,5 +1,5 @@
-版本与变更
-==========
+第六章：版本与变更
+==================
 
 当前文档对应 `cubebraid_sdk GitHub 仓库 <https://github.com/GJXS1980/cubebraid_sdk>`__ 的公开接口快照。SDK 目录包含 ``include``、``lib``、``bin``、``src``、``scripts`` 和 ``doc``，但当前快照没有统一的版本清单或变更日志文件。
 

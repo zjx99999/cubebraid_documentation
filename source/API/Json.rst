@@ -1,5 +1,5 @@
-Json SDK
-========
+7. 配置文件解析模块（JsonParameter SDK）
+=========================================
 
 头文件：``include/CubeBraidSDK/JsonSDK/JsonParameterSDK.h``
 
@@ -138,3 +138,8 @@ Json SDK 是纯 C ABI 的参数读写库，接口以文件路径、索引和输�
      - TXT 配置错误。
 
 失败后可使用 ``JsonParameterSDK_GetLastError(buffer, buffer_size)`` 读取文本错误信息。
+
+.. toctree::
+   :hidden:
+
+   ../Guides/Configuration

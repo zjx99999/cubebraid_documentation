@@ -6,27 +6,18 @@ CubeBraid SDK 面向集装箱装卸柜机器人系统，提供 AGV、工业相�
 文档结构
 --------
 
-* **系统架构与产品能力**：从整体分层、模块职责和接口边界了解 CubeBraid SDK。
-* **快速入门**：完成 SDK 获取、Windows 构建、运行时依赖配置和第一个程序。
-* **SDK 参考**：按 AGV、相机、机器人、PLC、倾角仪、运动学、参数和日志模块查阅接口。
-* **集成与部署**：了解典型装卸柜流程、配置文件、Python ``ctypes`` 对接和运行时发布要求。
-* **安全、版本与支持**：在真实设备联调前阅读安全须知，并记录 SDK 版本和现场依赖。
+左侧导航按《CubeBraid SDK 技术文档》的七章结构编排。每一章的子页对应原文中的系统设计、快速入门、模块参考、跨语言集成、部署和安全说明。
 
 .. toctree::
    :titlesonly:
    :maxdepth: 2
    :hidden:
 
-   About-CubeBraid
+   System-Architecture
    Get-Started
-   SDK-Architecture
-   Submodules
    API-Reference
-   Guides/Container-Workflow
-   Guides/Configuration
+   Integration-and-Deployment
    Guides/Safety
-   Guides/Deployment
-   Developer-Tools
    Releases
    Contact
 

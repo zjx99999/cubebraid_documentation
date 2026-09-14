@@ -1,5 +1,5 @@
-Logger SDK
-==========
+8. 日志记录与安全监控模块（Logger SDK）
+========================================
 
 头文件：``include/CubeBraidSDK/LoggerSDK/LoggerSDK.h``
 

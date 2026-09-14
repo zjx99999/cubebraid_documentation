@@ -1,5 +1,5 @@
-API 参考
-========
+第三章：SDK 参考
+================
 
 本节按照公开头文件整理模块 API。函数签名、枚举值、结构体字段和单位来自 `CubeBraid SDK 仓库 <https://github.com/GJXS1980/cubebraid_sdk>`__ 的 ``include/CubeBraidSDK``；SDK 发布版本发生变化时，请以随版本发布的头文件为最终依据。
 
@@ -16,11 +16,11 @@ API 参考
 
    API/AGV
    API/Camera
-   API/Json
+   API/Kawasaki
    API/Robot
    API/PLC
    API/Sensor
-   API/Kawasaki
+   API/Json
    API/Logger
 
 头文件位置

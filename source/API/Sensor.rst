@@ -1,5 +1,5 @@
-Sensor SDK
-===========================
+6. 车体姿态感知模块（Inclinometer SDK）
+========================================
 
 头文件：``include/CubeBraidSDK/SensorSDK/InclinometerSDK.h``
 

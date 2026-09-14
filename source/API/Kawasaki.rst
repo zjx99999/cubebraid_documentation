@@ -1,5 +1,5 @@
-Kawasaki SDK
-============
+3. 机械臂运动学与轨迹规划模块（Kawasaki Kinematics SDK）
+==========================================================
 
 头文件：``include/CubeBraidSDK/KawasakiSDK/kawasaki_kinematics_sdk.h``
 

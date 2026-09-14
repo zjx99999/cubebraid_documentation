@@ -1,5 +1,5 @@
-Camera SDK
-==========
+2. 3D视觉与基准点感知模块（Camera3D SDK）
+===========================================
 
 头文件：``include/CubeBraidSDK/CameraSDK/CameraSDK.h``
 

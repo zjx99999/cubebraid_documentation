@@ -1,5 +1,5 @@
-SDK 架构
-========
+1.1 系统架构设计
+=================
 
 CubeBraid 装卸柜机器人系统采用模块化分层架构设计，自底向上分为硬件抽象与通信层、底层 SDK 导出层、业务逻辑控制层以及应用层。各模块保持高内聚、低耦合，通过标准化接口交换数据。
 
@@ -32,25 +32,6 @@ CubeBraid 装卸柜机器人系统采用模块化分层架构设计，自底向�
    * - 可观测性层
      - LoggerSDK
      - 统一日志实例、格式化日志和紧急停止原因记录。
-
-C/C++ 动态库导出规范
----------------------
-
-为了保证 Windows 与 Linux 环境下的跨平台兼容性，各 SDK 使用条件编译的动态库导出/导入宏。常见宏包括 ``AGV_API``、``CAMERA3D_API``、``PLC_SDK_API`` 和 ``ROBOT_API``：
-
-.. code-block:: cpp
-
-   #ifdef _WIN32
-   #  ifdef AGV_SDK_EXPORTS
-   #    define AGV_API __declspec(dllexport)
-   #  else
-   #    define AGV_API __declspec(dllimport)
-   #  endif
-   #else
-   #  define AGV_API __attribute__((visibility("default")))
-   #endif
-
-内部关键资源管理遵循 RAII。针对复杂硬件操作类采用 PImpl（指向实现的指针）隐藏底层通讯细节和第三方库依赖，保持公开头文件干净、轻量。应用侧仍需匹配 C++14、编译器 ABI、x64 位数和库配置。
 
 一次装卸柜任务
 --------------

@@ -1,5 +1,5 @@
-Robot SDK
-=========
+4. 机器人抓取控制与位姿补偿模块（Robot SDK）
+==============================================
 
 头文件：``include/CubeBraidSDK/RobotSDK/RobotSDK.h``
 
