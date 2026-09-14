@@ -53,5 +53,5 @@ SDK 同时提供原生 C++ 接口和部分 C ABI 接口。C ABI 适合 Python ``
 
 当前页面对应 CubeBraid SDK 仓库中的接口快照。若头文件、动态库和本文档版本不一致，请优先以随 SDK 发布的 ``include`` 目录头文件为准，并记录 SDK commit 或发布版本。
 
-* `CubeBraid 官方网站 <https://www.rossum-robot.com/product/776.html/>`__
+* `CubeBraid 官方网站 <https://www.rossum-robot.com/product/776.html>`__
 * `CubeBraid SDK GitHub 仓库 <https://github.com/GJXS1980/cubebraid_sdk>`__
