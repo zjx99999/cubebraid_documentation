@@ -237,11 +237,9 @@ html_js_files = []
 
 # Favicon.
 #
-# Put favicon.ico under:
-#
-# source/favicon.ico
+# Use the favicon from the upstream static assets.
 
-html_favicon = 'favicon.ico'
+html_favicon = 'source/_static/favicon.ico'
 
 
 # ============================================================================

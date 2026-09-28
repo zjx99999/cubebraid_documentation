@@ -1,57 +1,51 @@
-.wy-nav-content {
-    max-width: 64rem;
+/* ================================
+   CubeBraid 左侧 Logo
+   ================================ */
+
+.wy-side-nav-search {
+    overflow: visible !important;
 }
 
-/* 左侧品牌区：站点标题、方块标志和搜索框。 */
+.wy-side-nav-search > a {
+    overflow: visible !important;
+}
+
 .cubebraid-sidebar-logo {
     display: flex;
+    align-items: center;
     justify-content: center;
+
+    width: 100%;
+    height: auto;
+
     margin: 0.65rem auto 0.85rem;
+
+    overflow: visible !important;
 }
 
 .cubebraid-sidebar-logo a {
-    align-items: center;
     display: flex;
-    height: 9rem;
+    align-items: center;
     justify-content: center;
-    width: 9rem;
+
+    width: 13rem;
+    height: auto;
+    min-height: 9rem;
+
+    overflow: visible !important;
 }
 
 .cubebraid-sidebar-logo img {
     display: block;
-    height: 100%;
+
+    width: 13rem;
+    height: 13rem;
+
+    max-width: none;
+    max-height: none;
+
     object-fit: contain;
-    width: 100%;
-}
+    object-position: center;
 
-@media screen and (max-width: 768px) {
-    .cubebraid-sidebar-logo {
-        margin: 0.55rem auto 0.75rem;
-    }
-
-    .cubebraid-sidebar-logo a {
-        height: 8rem;
-        width: 8rem;
-    }
-}
-
-.pageheader {
-    background: #f4f7fb;
-    border-bottom: 1px solid #d8e0ea;
-    color: #334155;
-    font-size: 0.9rem;
-    padding: 0.25rem 0 0.45rem;
-}
-
-#topnav-table {
-    border: 0;
-    margin: 0 auto;
-}
-
-#topnav-table a {
-    color: #1565c0;
-}
-
-.admonition.important {
-    border-left-color: #1565c0;
+    overflow: visible;
 }
