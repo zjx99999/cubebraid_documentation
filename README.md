@@ -48,12 +48,17 @@ SDK 仓库包含 `include`、`lib`、`bin`、`src`、`scripts` 和 `doc` 目录�
 * `conf.py`：项目、主题和构建配置；
 * `build/`：HTML 输出目录，不提交到 Git。
 
-# 设置开机自启动(ubuntu)
+## Ubuntu 开机自启动
+
+以下是 systemd 服务模板。创建服务前，将 `YOUR_LINUX_USER` 替换为实际的 Linux 用户名，并将所有 `/ABSOLUTE/PATH/TO/cubebraid_documentation` 替换为本仓库的实际绝对路径。该用户需要能读取已构建的 `build/html`，且仓库内已创建 `cubebraiddoc` 虚拟环境。
+
 ```bash
 # 创建 systemd 服务
 sudo gedit /etc/systemd/system/cubebraiddoc.service
 ```
-cubebraiddoc.service文件内容如下：
+
+`cubebraiddoc.service` 文件内容如下：
+
 ```bash
 [Unit]
 Description=CubeBraid Documentation HTTP Server
@@ -61,9 +66,9 @@ After=network.target
 
 [Service]
 Type=simple
-User=hgrd
-WorkingDirectory=/home/hgrd/demo/cubebraid_documentation
-ExecStart=/home/hgrd/demo/cubebraid_documentation/cubebraiddoc/bin/python -m http.server 8000 --bind 0.0.0.0 --directory /home/hgrd/demo/cubebraid_documentation/build/html
+User=YOUR_LINUX_USER
+WorkingDirectory=/ABSOLUTE/PATH/TO/cubebraid_documentation
+ExecStart=/ABSOLUTE/PATH/TO/cubebraid_documentation/cubebraiddoc/bin/python -m http.server 8000 --bind 0.0.0.0 --directory /ABSOLUTE/PATH/TO/cubebraid_documentation/build/html
 Restart=always
 RestartSec=5
 
@@ -71,7 +76,8 @@ RestartSec=5
 WantedBy=multi-user.target
 ```
 
-环境配置：
+替换模板中的用户名和路径后，执行以下命令：
+
 ```bash
 # 让 systemd 重新读取配置
 sudo systemctl daemon-reload
